@@ -13,3 +13,5 @@
 - Rename `.env.example` file to `.env`
 - Installs dependencies and run the container: `docker-compose up --build`
 - Open up an API documentation and enjoy: `http://0.0.0.0:8000/docs`
+
+Working API is available here: [Basic REST API](https://basic-rest-api-y4vhhmtj7a-lz.a.run.app/docs)
