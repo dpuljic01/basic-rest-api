@@ -1,0 +1,3 @@
+[virtualenvs]
+in-project = true # otherwise venv will be located somewhere on the system
+path = ".venv"
