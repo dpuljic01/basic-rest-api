@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from sqlalchemy import select, delete, func
+from sqlalchemy import select, delete, func, CursorResult
 
 from service.api.fact.filter import FactFilter
 from service.api.fact.model import FactUpdate, FactCreate
@@ -40,8 +40,8 @@ class FactRepository(AsyncBaseRepository):
 
     async def delete(self, fact_id: int) -> None:
         query = delete(Fact).where(Fact.id == fact_id)
-        result = await self.async_session.execute(query)
-        if not result:
+        result: CursorResult = await self.async_session.execute(query)
+        if not result.rowcount:
             raise ObjectNotFound("Fact")
         await self.async_session.flush()
 

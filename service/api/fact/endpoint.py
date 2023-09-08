@@ -5,6 +5,7 @@ from httpx import HTTPStatusError
 
 from service.api.fact.filter import FactFilter
 from service.api.fact.model import FactResponse, FactUpdate, FactCreate, FactRequest
+from service.common.exceptions import ObjectNotFound
 from service.common.utils import (
     get_repository_manager,
     get_numbers_api_client,
@@ -44,8 +45,8 @@ async def upsert_fact(
     existing_fact = await repository.fact_repository.get_by_date(
         request.day, month_name
     )
-    fact_create = FactCreate(day=request.day, month=month_name, fact=fact_response)
     if not existing_fact:
+        fact_create = FactCreate(day=request.day, month=month_name, fact=fact_response)
         fact_db = await repository.fact_repository.create(fact_create)
     else:
         update_model = FactUpdate(fact=fact_response)
@@ -71,5 +72,8 @@ async def delete_fact_by_id(
     repository: RepositoryManager = Depends(get_repository_manager),
 ) -> dict:
     check_api_key(x_api_key)
-    await repository.fact_repository.delete(fact_id)
+    try:
+        await repository.fact_repository.delete(fact_id)
+    except ObjectNotFound as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
     return {"status": "Deleted!"}

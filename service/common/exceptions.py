@@ -3,7 +3,7 @@ from fastapi import HTTPException
 
 class ObjectNotFound(HTTPException):
     def __init__(self, name: str):
-        detail = f"{name} not found!"
+        detail = f"{name} not found."
         super().__init__(status_code=404, detail=detail)
 
 

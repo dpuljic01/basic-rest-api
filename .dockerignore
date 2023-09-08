@@ -77,3 +77,6 @@ venv/
 
 # VS Code
 .vscode/
+
+# Database
+dates_db.db
